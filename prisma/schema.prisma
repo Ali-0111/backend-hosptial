@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model hospital {
+  id      Int     @id @default(autoincrement())
+  name    String  @db.VarChar(255)
+  address String  @db.VarChar(255)
+  child   child[]
+  nurse   nurse[]
+}
+
+model nurse {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  hospital_id Int
+  child       child[]
+  hospital    hospital @relation(fields: [hospital_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model child {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  nurse_id    Int
+  hospital_id Int
+  hospital    hospital @relation(fields: [hospital_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  nurse       nurse    @relation(fields: [nurse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model vaccine {
+  id                       Int                        @id @default(autoincrement())
+  name                     String                     @db.VarChar(255)
+  vaccination_program_step vaccination_program_step[]
+}
+
+model vaccination_program {
+  id                       Int                        @id @default(autoincrement())
+  name                     String                     @db.VarChar(255)
+  number_of_steps          Int
+  vaccination_program_step vaccination_program_step[]
+}
+
+model vaccination_program_step {
+  id                     Int                 @id @default(autoincrement())
+  vaccination_program_id Int
+  step_rank              Int
+  step_name              String              @db.VarChar(255)
+  step_status            String              @db.VarChar(50)
+  vaccine_id             Int
+  vaccination_program    vaccination_program @relation(fields: [vaccination_program_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  vaccine                vaccine             @relation(fields: [vaccine_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
