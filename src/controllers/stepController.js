@@ -2,8 +2,18 @@ const StepService = require("#services/stepService");
 
 class StepController {
   static async getAllSteps(req, res) {
+    const { vaccination_program_id, step_rank } = req.query;
+    let steps;
+
     try {
-      const steps = await StepService.getAllSteps();
+      if (vaccination_program_id) {
+        steps = await StepService.getAllFilteredSteps(
+          vaccination_program_id,
+          step_rank
+        );
+      } else {
+        steps = await StepService.getAllSteps();
+      }
       res.status(200).json(steps);
     } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
@@ -11,7 +21,6 @@ class StepController {
   }
 
   static async getStepById(req, res) {
-    const stepId = req.params.id;
     try {
       const step = await StepService.getStepById(stepId);
 
