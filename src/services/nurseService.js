@@ -6,7 +6,11 @@ class NurseService {
   }
 
   static async getNurseById(id) {
-    return await prisma.nurse.findUnique({ where: { id: parseInt(id) } });
+    try {
+      return await prisma.nurse.findUnique({ where: { id: parseInt(id) } });
+    } catch (err) {
+      return null;
+    }
   }
 
   static async createNurse(data) {
@@ -14,14 +18,22 @@ class NurseService {
   }
 
   static async updateNurse(id, data) {
-    return await prisma.nurse.update({
-      where: { id: parseInt(id) },
-      data,
-    });
+    try {
+      return await prisma.nurse.update({
+        where: { id: parseInt(id) },
+        data,
+      });
+    } catch (err) {
+      return null;
+    }
   }
 
   static async deleteNurse(id) {
-    return await prisma.nurse.delete({ where: { id: parseInt(id) } });
+    try {
+      return await prisma.nurse.delete({ where: { id: parseInt(id) } });
+    } catch (err) {
+      return null;
+    }
   }
 }
 
