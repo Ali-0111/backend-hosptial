@@ -9,6 +9,7 @@ class VaccProgService {
     try {
       return await prisma.vaccination_program.findUnique({
         where: { id: parseInt(id) },
+        include: { vaccination_program_step: true },
       });
     } catch (err) {
       return null;
