@@ -48,6 +48,19 @@ class VaccRecordController {
     }
   }
 
+  static async createManyVaccRecord(req, res) {
+    try {
+      const record = await vaccRecordService.createManyVaccRecord(req.body);
+      res
+        .status(201)
+        .json({ message: "Vaccine Record created successfully", record });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Internal Server Error", details: error.message });
+    }
+  }
+
   static async updateVaccRecord(req, res) {
     const record_id = req.params.id;
     try {
