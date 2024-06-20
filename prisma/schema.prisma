@@ -70,6 +70,7 @@ model vaccine_record {
   step_rank              Int
   step_status            String              @db.VarChar(50)
   vaccination_date       DateTime?           @db.Timestamp(6)
+  step_name              String              @db.VarChar(250)
   child                  child               @relation(fields: [child_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   hospital               hospital            @relation(fields: [hospital_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   nurse                  nurse               @relation(fields: [nurse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
