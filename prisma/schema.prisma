@@ -58,23 +58,21 @@ model vaccination_program_step {
   vaccine_id             Int
   vaccination_program    vaccination_program @relation(fields: [vaccination_program_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   vaccine                vaccine             @relation(fields: [vaccine_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  vaccine_record         vaccine_record[]
 }
 
 model vaccine_record {
-  id                          Int                      @id @default(autoincrement())
-  child_id                    Int
-  nurse_id                    Int
-  hospital_id                 Int
-  vaccination_program_id      Int
-  vaccine_id                  Int
-  vaccination_program_step_id Int
-  vaccination_date            DateTime?                @db.Timestamp(6)
-  status                      String?                  @db.VarChar(50)
-  child                       child                    @relation(fields: [child_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  hospital                    hospital                 @relation(fields: [hospital_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  nurse                       nurse                    @relation(fields: [nurse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  vaccination_program         vaccination_program      @relation(fields: [vaccination_program_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  vaccination_program_step    vaccination_program_step @relation(fields: [vaccination_program_step_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  vaccine                     vaccine                  @relation(fields: [vaccine_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                     Int                 @id @default(autoincrement())
+  child_id               Int
+  nurse_id               Int
+  hospital_id            Int
+  vaccination_program_id Int
+  vaccine_id             Int
+  step_rank              Int
+  step_status            String              @db.VarChar(50)
+  vaccination_date       DateTime?           @db.Timestamp(6)
+  child                  child               @relation(fields: [child_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  hospital               hospital            @relation(fields: [hospital_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  nurse                  nurse               @relation(fields: [nurse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  vaccination_program    vaccination_program @relation(fields: [vaccination_program_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  vaccine                vaccine             @relation(fields: [vaccine_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
