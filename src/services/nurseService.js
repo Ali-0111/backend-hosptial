@@ -2,7 +2,7 @@ const prisma = require("#prismaClient");
 
 class NurseService {
   static async getAllNurses() {
-    return await prisma.nurse.findMany();
+    return await prisma.nurse.findMany({take: 10});
   }
 
   static async getNurseById(id) {

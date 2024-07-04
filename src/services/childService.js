@@ -2,7 +2,9 @@ const prisma = require("#prismaClient");
 
 class ChildService {
   static async getAllChilds() {
-    return await prisma.child.findMany();
+    return await prisma.child.findMany({
+      take: 10
+    });
   }
 
   static async getChildById(id) {
