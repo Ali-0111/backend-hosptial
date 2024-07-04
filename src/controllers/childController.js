@@ -1,10 +1,22 @@
 const ChildService = require("#services/childService");
 
 class ChildController {
+  // list all 10 child
+  // with nurse_id
+  // or generall records
+
   static async getAllChilds(req, res) {
+    const { nurse_id } = req.query;
+    
     try {
-      const children = await ChildService.getAllChilds();
-      res.status(200).json(children);
+      let children;
+      if (nurse_id) {
+        children = await ChildService.getAllChildByNurseID(nurse_id);  
+      } else {
+        children = await ChildService.getAllChilds();
+      }
+
+      return res.status(200).json(children);
     } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
     }
