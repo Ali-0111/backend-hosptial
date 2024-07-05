@@ -1,15 +1,36 @@
 const VaccProgService = require("#services/vaccProgService");
 const prisma = require("#prismaClient");
+const { checkCompletedVaccines } = require("#helpers");
 
 class VaccRecordService {
   static async getAllVaccRecords() {
     return await prisma.vaccine_record.findMany();
   }
 
-  static async getRecordsForChild(child_id) {
-    return await prisma.vaccine_record.findMany({
-      where: { child_id: parseInt(child_id) },
+  static async getRecordsForChild(child_id, prog_id) {
+    const allRecords = await prisma.vaccine_record.findMany({
+      where: {
+        child_id: parseInt(child_id),
+        vaccination_program_id: parseInt(prog_id),
+      },
+      orderBy: { step_rank: "asc" },
     });
+
+    const groupedRecords = allRecords.reduce((acc, record) => {
+      if (!acc[record.step_name]) {
+        acc[record.step_name] = [];
+      }
+      acc[record.step_name].push(record);
+      return acc;
+    }, {});
+
+    const result = Object.keys(groupedRecords).map((stepName) => ({
+      step_name: stepName,
+      vaccines: groupedRecords[stepName],
+      status: checkCompletedVaccines(groupedRecords[stepName]),
+    }));
+
+    return result;
   }
 
   static async getVaccRecordById(id) {

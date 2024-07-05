@@ -2,12 +2,12 @@ const vaccRecordService = require("#services/vaccRecordService");
 
 class VaccRecordController {
   static async getAllVaccRecords(req, res) {
-    const { child_id } = req.query;
+    const { child_id, prog_id } = req.query;
     let records;
 
     try {
-      if (child_id) {
-        records = await vaccRecordService.getRecordsForChild(child_id);
+      if (child_id && prog_id) {
+        records = await vaccRecordService.getRecordsForChild(child_id, prog_id);
       } else {
         records = await vaccRecordService.getAllVaccRecords();
       }
