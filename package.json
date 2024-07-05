@@ -30,7 +30,8 @@
     "#root/*": "./*",
     "#prismaClient": "./src/prismaClient",
     "#services": "./src/services",
-    "#controllers": "./src/controllers"
+    "#controllers": "./src/controllers",
+    "#helpers": "./src/helpers"
   },
   "_moduleDirectories": [
     "node_modules_custom"
