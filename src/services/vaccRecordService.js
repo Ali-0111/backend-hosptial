@@ -72,10 +72,16 @@ class VaccRecordService {
   }
 
   static async updateVaccRecord(id, data) {
+    const {child_id, nurse_id, hospital_id, vaccination_program_id, step_rank, step_status} = data;
     try {
-      return await prisma.vaccine_record.update({
-        where: { id: parseInt(id) },
-        data,
+      return await prisma.vaccine_record.updateMany({
+        where: { child_id: parseInt(child_id), vaccination_program_id: parseInt(vaccination_program_id),step_rank: parseInt(step_rank) },
+        data: {
+          step_status: step_status,
+          nurse_id: nurse_id,
+          hospital_id: hospital_id,
+          vaccination_date: new Date(),
+        },
       });
     } catch (err) {
       return null;

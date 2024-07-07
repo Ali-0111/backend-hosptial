@@ -28,6 +28,20 @@ class ChildService {
     }
   }
 
+  static async findChildByName(name) {
+    try {
+      return await prisma.child.findMany(
+        { where: { 
+            name: {
+              contains: name
+            }
+          }
+        });
+    } catch (err) {
+      return null;
+    }
+  }
+
   static async createChild(data) {
     return await prisma.child.create({ data });
   }

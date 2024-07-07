@@ -38,6 +38,23 @@ class ChildController {
     }
   }
 
+  static async findChildByName(req, res) {
+    const child_name = req.params.child_name;
+    
+    try {
+      const child = await ChildService.findChildByName(child_name);
+
+      if (!child) {
+        return res
+          .status(404)
+          .json({ error: `Child not found with name ${child_name}` });
+      }
+      res.status(200).json(child);
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+
   static async createChild(req, res) {
     try {
       const child = await ChildService.createChild(req.body);
