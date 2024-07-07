@@ -10,6 +10,23 @@ class HospitalController {
     }
   }
 
+  static async findHospitalByName(req, res) {
+    const hospital_name = req.params.hospital_name;
+    
+    try {
+      const hospital = await HospitalService.findHospitalByName(hospital_name);
+
+      if (!hospital) {
+        return res
+          .status(404)
+          .json({ error: `hospital not found with name ${hospital_name}` });
+      }
+      res.status(200).json(hospital);
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+
   static async getHospitalById(req, res) {
     const hospId = req.params.id;
     try {

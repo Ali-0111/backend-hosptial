@@ -26,6 +26,23 @@ class NurseController {
     }
   }
 
+  static async findNurseByName(req, res) {
+    const name = req.params.nurse_name;
+    try {
+      const nurse = await NurseService.findNurseByName(name);
+
+      if (!nurse) {
+        return res
+          .status(404)
+          .json({ error: `Nurse not found with name ${name}` });
+      }
+      res.status(200).json(nurse);
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+
+
   static async createNurse(req, res) {
     try {
       const nurse = await NurseService.createNurse(req.body);

@@ -13,6 +13,20 @@ class HospitalService {
     }
   }
 
+  static async findHospitalByName(name) {
+    try {
+      return await prisma.hospital.findMany(
+        { where: { 
+            name: {
+              contains: name
+            }
+          }
+        });
+    } catch (err) {
+      return null;
+    }
+  }
+
   static async createHospital(data) {
     return await prisma.hospital.create({ data });
   }

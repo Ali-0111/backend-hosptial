@@ -13,6 +13,20 @@ class NurseService {
     }
   }
 
+  static async findNurseByName(name) {
+    try {
+      return await prisma.nurse.findMany(
+        { where: { 
+            name: {
+              contains: name
+            }
+          }
+        });
+    } catch (err) {
+      return null;
+    }
+  }
+
   static async createNurse(data) {
     return await prisma.nurse.create({ data });
   }
