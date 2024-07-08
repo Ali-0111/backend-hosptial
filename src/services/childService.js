@@ -19,7 +19,7 @@ class ChildService {
 
   static async getChildById(id) {
     try {
-      return await prisma.child.findUnique({ where: { id: parseInt(id) } });
+      return await prisma.child.findUnique({ include: { vaccine_record: true}, where: { id: parseInt(id) } });
     } catch (err) {
       return null;
     }
@@ -32,7 +32,8 @@ class ChildService {
             name: {
               contains: name
             }
-          }
+          },
+          include: { vaccine_record: true},
         });
     } catch (err) {
       return null;
