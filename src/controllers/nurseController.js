@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 const NurseService = require("#services/nurseService");
 
 class NurseController {
@@ -72,7 +74,6 @@ class NurseController {
     try {
       const nurseId = req.params.id;
       const nurse = await NurseService.deleteNurse(nurseId);
-
       if (!nurse) {
         return res
           .status(404)
@@ -83,7 +84,50 @@ class NurseController {
         .status(200)
         .json({ message: `Nurse with ID ${nurseId} successfully deleted` });
     } catch (error) {
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: "Internal Server Error", m: error.message });
+    }
+  }
+
+  static async registerNurse(req, res) {
+    const { nurse_id, username, password } = req.body;
+
+    if (!username || !password || !nurse_id) {
+      return res.status(400).json({ message: 'In-valid data. Add required fields' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const data = {
+      nurse_id: nurse_id,
+      username: username,
+      password: hashedPassword
+    }
+
+    try {
+      const nurse = await NurseService.registerNurse(data);
+      res.status(201).json({ message: "Nurse registered successfully" });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error", message: error.message });
+    }
+  }
+
+  static async logInNurse(req, res) {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({ message: 'In-valid data. Add required fields' });
+    }
+
+    try {
+      const token = await NurseService.logInNurse({username, password});
+      
+      if (!token) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      res.status(201).json({ token });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error", message: error.message });
     }
   }
 }
