@@ -34,8 +34,8 @@
     "#prismaClient": "./src/prismaClient",
     "#services": "./src/services",
     "#controllers": "./src/controllers",
-    "#middlewares": "./src/middlewares"
-
+    "#middlewares": "./src/middlewares",
+    "#helpers": "./src/helpers"
   },
   "_moduleDirectories": [
     "node_modules_custom"
