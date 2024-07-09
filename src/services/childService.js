@@ -10,7 +10,7 @@ class ChildService {
   static async getAllChildByNurseID(nurse_id) {
     return await prisma.child.findMany({
       take: 10,
-      include: { vaccine_record: true},
+      include: { vaccine_record: {orderBy: {step_rank: 'asc'}, include: {vaccine: true} }},
       where: {
         nurse_id: parseInt(nurse_id)
       }
@@ -35,7 +35,8 @@ class ChildService {
             name: {
               contains: name
             }
-          }
+          },
+          include: { vaccine_record: {orderBy: {step_rank: 'asc'}}}
         });
     } catch (err) {
       return null;
