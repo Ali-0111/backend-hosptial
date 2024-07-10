@@ -31,12 +31,13 @@ class ChildService {
   static async findChildByName(name) {
     try {
       return await prisma.child.findMany(
-        { where: { 
+        { 
+          where: { 
             name: {
               contains: name
             }
           },
-          include: { vaccine_record: {orderBy: {step_rank: 'asc'}}}
+          include: { vaccine_record: {orderBy: {step_rank: 'asc'}, include: {vaccine: true}}}
         });
     } catch (err) {
       return null;
