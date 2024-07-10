@@ -2,7 +2,11 @@ const prisma = require("#prismaClient");
 
 class VaccProgService {
   static async getAllVaccProgs() {
-    return await prisma.vaccination_program.findMany();
+    return await prisma.vaccination_program.findMany({
+      include: {
+        vaccination_program_step: { orderBy: { step_rank: "asc" } },
+      },
+    });
   }
 
   static async getVaccProgById(id) {
