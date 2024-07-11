@@ -4,7 +4,10 @@ class VaccProgService {
   static async getAllVaccProgs() {
     return await prisma.vaccination_program.findMany({
       include: {
-        vaccination_program_step: { orderBy: { step_rank: "asc" } },
+        vaccination_program_step: {
+          orderBy: { step_rank: "asc" },
+          include: { vaccine: true },
+        },
       },
     });
   }
