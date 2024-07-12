@@ -1,5 +1,5 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const prisma = require("#prismaClient");
 
@@ -8,7 +8,7 @@ const prisma = require("#prismaClient");
 const SECRET_KEY = process.env.SECRET_KEY;
 class NurseService {
   static async getAllNurses() {
-    return await prisma.nurse.findMany({take: 10});
+    return await prisma.nurse.findMany({ take: 10 });
   }
 
   static async getNurseById(id) {
@@ -21,13 +21,13 @@ class NurseService {
 
   static async findNurseByName(name) {
     try {
-      return await prisma.nurse.findMany(
-        { where: { 
-            name: {
-              contains: name
-            }
-          }
-        });
+      return await prisma.nurse.findMany({
+        where: {
+          name: {
+            contains: name,
+          },
+        },
+      });
     } catch (err) {
       return null;
     }
@@ -57,30 +57,32 @@ class NurseService {
   }
 
   static async registerNurse(data) {
-    return await prisma.nurse_credentials.create({data});
+    return await prisma.nurse_credentials.create({ data });
   }
 
   static async logInNurse(data) {
-    const {username, password } = data
+    const { username, password } = data;
 
-    const nurse = await prisma.nurse_credentials.findUnique(
-      { where: { username } }
-    )
+    const rec = await prisma.nurse_credentials.findUnique({
+      where: { username },
+      include: { nurse: { include: { hospital: true } } },
+    });
 
-    if (!nurse) {
+    if (!rec) {
       return null;
     }
 
-    const checkPassword = await bcrypt.compare(password, nurse.password);
+    const checkPassword = await bcrypt.compare(password, rec.password);
 
-    if(!checkPassword) {
+    if (!checkPassword) {
       return null;
     }
 
-    const token = jwt.sign({ username: nurse.username }, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ username: rec.username }, SECRET_KEY, {
+      expiresIn: "1h",
+    });
 
-    return token;
-    
+    return { profile: rec.nurse, token };
   }
 }
 

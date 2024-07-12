@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 const NurseService = require("#services/nurseService");
 
@@ -44,7 +44,6 @@ class NurseController {
     }
   }
 
-
   static async createNurse(req, res) {
     try {
       const nurse = await NurseService.createNurse(req.body);
@@ -84,7 +83,9 @@ class NurseController {
         .status(200)
         .json({ message: `Nurse with ID ${nurseId} successfully deleted` });
     } catch (error) {
-      res.status(500).json({ error: "Internal Server Error", m: error.message });
+      res
+        .status(500)
+        .json({ error: "Internal Server Error", m: error.message });
     }
   }
 
@@ -92,7 +93,9 @@ class NurseController {
     const { nurse_id, username, password } = req.body;
 
     if (!username || !password || !nurse_id) {
-      return res.status(400).json({ message: 'In-valid data. Add required fields' });
+      return res
+        .status(400)
+        .json({ message: "In-valid data. Add required fields" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -100,14 +103,16 @@ class NurseController {
     const data = {
       nurse_id: nurse_id,
       username: username,
-      password: hashedPassword
-    }
+      password: hashedPassword,
+    };
 
     try {
       const nurse = await NurseService.registerNurse(data);
       res.status(201).json({ message: "Nurse registered successfully" });
     } catch (error) {
-      res.status(500).json({ error: "Internal Server Error", message: error.message });
+      res
+        .status(500)
+        .json({ error: "Internal Server Error", message: error.message });
     }
   }
 
@@ -115,19 +120,26 @@ class NurseController {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res.status(400).json({ message: 'In-valid data. Add required fields' });
+      return res
+        .status(400)
+        .json({ message: "In-valid data. Add required fields" });
     }
 
     try {
-      const token = await NurseService.logInNurse({username, password});
-      
-      if (!token) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+      const token_profile = await NurseService.logInNurse({
+        username,
+        password,
+      });
+
+      if (!token_profile) {
+        return res.status(401).json({ message: "Invalid credentials" });
       }
 
-      res.status(201).json({ token });
+      res.status(201).json({ ...token_profile });
     } catch (error) {
-      res.status(500).json({ error: "Internal Server Error", message: error.message });
+      res
+        .status(500)
+        .json({ error: "Internal Server Error", message: error.message });
     }
   }
 }
