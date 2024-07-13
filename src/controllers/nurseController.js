@@ -13,7 +13,7 @@ class NurseController {
   }
 
   static async getNurseById(req, res) {
-    const nurseId = req.params.id;
+    const nurse_id = req.params.id;
     try {
       const nurse = await NurseService.getNurseById(nurseId);
 
@@ -136,6 +136,35 @@ class NurseController {
       }
 
       res.status(201).json({ ...token_profile });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Internal Server Error", message: error.message });
+    }
+  }
+
+  static async updateNurseSecurity(req, res) {
+    const { new_password, new_username, old_password, nurse_id } = req.body;
+
+    if (!old_password || !nurse_id) {
+      return res
+        .status(400)
+        .json({ message: "In-valid data. Add required fields" });
+    }
+
+    try {
+      const nurse = await NurseService.updateNurseSecurity({
+        nurse_id,
+        old_password,
+        new_password,
+        new_username,
+      });
+
+      if (!nurse) {
+        return res.status(404).json({ message: "Nurse not found" });
+      }
+
+      res.status(200).json({ message: "Nurse security updated successfully" });
     } catch (error) {
       res
         .status(500)

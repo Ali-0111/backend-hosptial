@@ -11,6 +11,7 @@ router.get("/:nurse_name", authMiddleware, NurseController.findNurseByName);
 router.post("/create", authMiddleware, NurseController.createNurse);
 router.post("/register", NurseController.registerNurse);
 router.post("/login", NurseController.logInNurse);
+router.post("/security", authMiddleware, NurseController.updateNurseSecurity);
 router.put("/update/:id", authMiddleware, NurseController.updateNurse);
 router.delete("/delete/:id", authMiddleware, NurseController.deleteNurse);
 

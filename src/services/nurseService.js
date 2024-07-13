@@ -84,6 +84,51 @@ class NurseService {
 
     return { profile: rec.nurse, token };
   }
+
+  static async updateNurseSecurity(data) {
+    const { nurse_id, old_password, new_username, new_password } = data;
+    try {
+      const nurseRec = await prisma.nurse_credentials.findUnique({
+        where: { nurse_id: nurse_id },
+      });
+
+      if (!nurseRec) {
+        throw new Error("Nurse not found");
+      }
+
+      // Verify the old password
+      const isPasswordCorrect = await bcrypt.compare(
+        old_password,
+        nurseRec.password
+      );
+
+      if (!isPasswordCorrect) {
+        throw new Error("Incorrect old password");
+      }
+
+      // Prepare the update data object
+      const updateData = {};
+
+      if (new_username) {
+        updateData.username = new_username;
+      }
+
+      if (new_password) {
+        const hashedPassword = await bcrypt.hash(new_password, 10);
+        updateData.password = hashedPassword;
+      }
+
+      // Update the nurse's credentials
+      const updatedNurse = await prisma.nurse_credentials.update({
+        where: { nurse_id: nurse_id },
+        data: updateData,
+      });
+
+      return updatedNurse;
+    } catch (error) {
+      throw new Error("Could not update nurse details");
+    }
+  }
 }
 
 module.exports = NurseService;
