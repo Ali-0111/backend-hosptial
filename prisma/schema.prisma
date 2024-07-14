@@ -21,7 +21,7 @@ model nurse {
   id                Int                @id @default(autoincrement())
   name              String             @db.VarChar(255)
   hospital_id       Int
-  phone             String             @default(dbgenerated("(+ '93749641270'::bigint)")) @db.VarChar(30)
+  phone             String             @default("077") @db.VarChar(30)
   address           String             @default("Kabul Afghanistan") @db.VarChar(255)
   last_name         String             @default("safari") @db.VarChar(100)
   child             child[]
