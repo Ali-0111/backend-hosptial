@@ -21,6 +21,9 @@ model nurse {
   id                Int                @id @default(autoincrement())
   name              String             @db.VarChar(255)
   hospital_id       Int
+  phone             String             @default(dbgenerated("(+ '93749641270'::bigint)")) @db.VarChar(30)
+  address           String             @default("Kabul Afghanistan") @db.VarChar(255)
+  last_name         String             @default("safari") @db.VarChar(100)
   child             child[]
   hospital          hospital           @relation(fields: [hospital_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   nurse_credentials nurse_credentials?
@@ -70,9 +73,9 @@ model vaccine_record {
   vaccination_program_id Int
   vaccine_id             Int
   step_rank              Int
+  step_name              String              @db.VarChar(255)
   step_status            String              @db.VarChar(50)
   vaccination_date       DateTime?           @db.Timestamp(6)
-  step_name              String              @db.VarChar(250)
   child                  child               @relation(fields: [child_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   hospital               hospital            @relation(fields: [hospital_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   nurse                  nurse               @relation(fields: [nurse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
