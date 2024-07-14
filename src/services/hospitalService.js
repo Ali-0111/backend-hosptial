@@ -62,7 +62,8 @@ class HospitalService {
     const { username, password } = data;
 
     const rec = await prisma.hospital_credentials.findUnique({
-      where: { username }
+      where: { username },
+      include: { hospital: true },
     });
 
     if (!rec) {
