@@ -1,10 +1,9 @@
+const prisma = require("#prismaClient");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const prisma = require("#prismaClient");
-
 // SECRET_KEY
-
 const SECRET_KEY = process.env.SECRET_KEY;
 class NurseService {
   static async getAllNurses() {
@@ -126,7 +125,7 @@ class NurseService {
 
       return updatedNurse;
     } catch (error) {
-      throw new Error("Could not update nurse details");
+      throw new Error(error.message);
     }
   }
 }
