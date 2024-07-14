@@ -81,7 +81,9 @@ class NurseService {
       expiresIn: "1h",
     });
 
-    return { profile: rec.nurse, token };
+    delete rec.password;
+
+    return { profile: rec, token };
   }
 
   static async updateNurseSecurity(data) {
