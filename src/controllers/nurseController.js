@@ -47,6 +47,17 @@ class NurseController {
   static async createNurse(req, res) {
     try {
       const nurse = await NurseService.createNurse(req.body);
+
+      const hashedPassword = await bcrypt.hash('asdf@123', 10);
+      
+      const data = {
+        nurse_id: nurse.id,
+        username: nurse.phone,
+        password: hashedPassword,
+      };
+
+      await NurseService.registerNurse(data);
+
       res.status(201).json({ message: "Nurse created successfully", nurse });
     } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
