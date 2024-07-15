@@ -4,8 +4,17 @@ const NurseService = require("#services/nurseService");
 
 class NurseController {
   static async getAllNurses(req, res) {
+    const { hospital_id } = req.query;
+
     try {
-      const nurses = await NurseService.getAllNurses();
+      let nurses;
+      
+      if (hospital_id) {
+        nurses = await NurseService.getNurseByHospitalID(hospital_id); 
+      } else {
+        nurses = await NurseService.getAllNurses();
+      }
+
       res.status(200).json(nurses);
     } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
@@ -29,9 +38,17 @@ class NurseController {
   }
 
   static async findNurseByName(req, res) {
+    const { hospital_id } = req.query;
     const name = req.params.nurse_name;
+
     try {
-      const nurse = await NurseService.findNurseByName(name);
+      let nurse;
+      
+      if (hospital_id) {
+        nurse = await NurseService.findNurseByNameForHospital(name, hospital_id);
+      } else {
+        nurse = await NurseService.findNurseByName(name);
+      }
 
       if (!nurse) {
         return res

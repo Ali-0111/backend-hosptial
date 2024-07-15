@@ -10,6 +10,15 @@ class NurseService {
     return await prisma.nurse.findMany({ take: 10 });
   }
 
+  static async getNurseByHospitalID(hospital_id) {
+    return await prisma.nurse.findMany({
+      take: 10,
+      where: {
+        hospital_id: parseInt(hospital_id)
+      }
+    });
+  }
+
   static async getNurseById(id) {
     try {
       return await prisma.nurse.findUnique({ where: { id: parseInt(id) } });
@@ -25,6 +34,21 @@ class NurseService {
           name: {
             contains: name,
           },
+        },
+      });
+    } catch (err) {
+      return null;
+    }
+  }
+
+  static async findNurseByNameForHospital(name, hospital_id) {
+    try {
+      return await prisma.nurse.findMany({
+        where: {
+          name: {
+            contains: name,
+          },
+          hospital_id: parseInt(hospital_id),
         },
       });
     } catch (err) {
