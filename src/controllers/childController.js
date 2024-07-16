@@ -2,16 +2,16 @@ const ChildService = require("#services/childService");
 
 class ChildController {
   // list all 10 child
-  // with nurse_id
+  // with parent_id
   // or generall records
 
   static async getAllChilds(req, res) {
-    const { nurse_id } = req.query;
-    
+    const { parent_id } = req.query;
+
     try {
       let children;
-      if (nurse_id) {
-        children = await ChildService.getAllChildByNurseID(nurse_id);  
+      if (parent_id) {
+        children = await ChildService.getAllChildByParentID(parent_id);
       } else {
         children = await ChildService.getAllChilds();
       }
@@ -40,7 +40,7 @@ class ChildController {
 
   static async findChildByName(req, res) {
     const child_name = req.params.child_name;
-    
+
     try {
       const child = await ChildService.findChildByName(child_name);
 

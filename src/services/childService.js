@@ -13,7 +13,7 @@ class ChildService {
     });
   }
 
-  static async getAllChildByNurseID(nurse_id) {
+  static async getAllChildByParentID(parent_id) {
     return await prisma.child.findMany({
       take: 10,
       include: {
@@ -21,9 +21,10 @@ class ChildService {
           orderBy: { step_rank: "asc" },
           include: { vaccine: true },
         },
+        parent: true,
       },
       where: {
-        nurse_id: parseInt(nurse_id),
+        parent_id: parseInt(parent_id),
       },
     });
   }
