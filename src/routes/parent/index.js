@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/", authMiddleware, ParentController.getAllParents);
 router.get("/:id(\\d+)", authMiddleware, ParentController.getParentById);
 router.get("/:parent_name", authMiddleware, ParentController.findParentByName);
-router.post("/create", authMiddleware, ParentController.createParent);
+router.post("/create", ParentController.createParent);
 router.put("/update/:id", authMiddleware, ParentController.updateParent);
 router.delete("/delete/:id", authMiddleware, ParentController.deleteParent);
 
