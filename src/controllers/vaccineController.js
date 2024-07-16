@@ -27,7 +27,7 @@ class VaccineController {
   }
 
   static async findVaccineByName(req, res) {
-    const vaccine_name = req.params.vaccine_name;
+    const vaccine_name = req.params.vaccine_name.toUpperCase();
 
     try {
       const vaccine = await VaccineService.findVaccineByName(vaccine_name);
@@ -44,8 +44,12 @@ class VaccineController {
   }
 
   static async createVaccine(req, res) {
+    const { name } = req.body;
+
     try {
-      const vaccine = await VaccineService.createVaccine(req.body);
+      const vaccine = await VaccineService.createVaccine({
+        name: name.toUpperCase(),
+      });
       res
         .status(201)
         .json({ message: "Vaccine created successfully", vaccine });
