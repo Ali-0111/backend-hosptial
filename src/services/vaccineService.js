@@ -2,7 +2,7 @@ const prisma = require("#prismaClient");
 
 class VaccineService {
   static async getAllVaccines() {
-    return await prisma.vaccine.findMany();
+    return await prisma.vaccine.findMany({ take: 10 });
   }
 
   static async getVaccineById(id) {
