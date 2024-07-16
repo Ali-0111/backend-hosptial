@@ -3,17 +3,28 @@ const prisma = require("#prismaClient");
 class ChildService {
   static async getAllChilds() {
     return await prisma.child.findMany({
-      take: 10
+      take: 10,
+      include: {
+        vaccine_record: {
+          orderBy: { step_rank: "asc" },
+          include: { vaccine: true },
+        },
+      },
     });
   }
 
   static async getAllChildByNurseID(nurse_id) {
     return await prisma.child.findMany({
       take: 10,
-      include: { vaccine_record: {orderBy: {step_rank: 'asc'}, include: {vaccine: true} }},
+      include: {
+        vaccine_record: {
+          orderBy: { step_rank: "asc" },
+          include: { vaccine: true },
+        },
+      },
       where: {
-        nurse_id: parseInt(nurse_id)
-      }
+        nurse_id: parseInt(nurse_id),
+      },
     });
   }
 
@@ -30,15 +41,19 @@ class ChildService {
 
   static async findChildByName(name) {
     try {
-      return await prisma.child.findMany(
-        { 
-          where: { 
-            name: {
-              contains: name
-            }
+      return await prisma.child.findMany({
+        where: {
+          name: {
+            contains: name,
           },
-          include: { vaccine_record: {orderBy: {step_rank: 'asc'}, include: {vaccine: true}}}
-        });
+        },
+        include: {
+          vaccine_record: {
+            orderBy: { step_rank: "asc" },
+            include: { vaccine: true },
+          },
+        },
+      });
     } catch (err) {
       return null;
     }
