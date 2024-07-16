@@ -6,6 +6,7 @@ const vaccineRoutes = require("./vaccine");
 const vaccProgRoutes = require("./vaccProg");
 const stepRoutes = require("./step");
 const recordRoutes = require("./vaccRec");
+const parentRoutes = require("./parent");
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use("/vaccine", vaccineRoutes);
 router.use("/vaccinationProgram", vaccProgRoutes);
 router.use("/step", stepRoutes);
 router.use("/vaccine_record", recordRoutes);
+router.use("/parent", parentRoutes);
 
 module.exports = router;
