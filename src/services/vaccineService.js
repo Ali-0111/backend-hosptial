@@ -13,6 +13,20 @@ class VaccineService {
     }
   }
 
+  static async findVaccineByName(name) {
+    try {
+      return await prisma.vaccine.findMany({
+        where: {
+          name: {
+            contains: name,
+          },
+        },
+      });
+    } catch (err) {
+      return null;
+    }
+  }
+
   static async createVaccine(data) {
     return await prisma.vaccine.create({ data });
   }
