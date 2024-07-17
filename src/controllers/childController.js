@@ -40,9 +40,10 @@ class ChildController {
 
   static async findChildByName(req, res) {
     const child_name = req.params.child_name;
+    const parent_id = req.query.parent_id;
 
     try {
-      const child = await ChildService.findChildByName(child_name);
+      const child = await ChildService.findChildByName(child_name, parent_id);
 
       if (!child) {
         return res

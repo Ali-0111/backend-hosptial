@@ -39,19 +39,21 @@ class ChildService {
     }
   }
 
-  static async findChildByName(name) {
+  static async findChildByName(name, parent_id) {
     try {
       return await prisma.child.findMany({
         where: {
           name: {
             contains: name,
           },
+          parent_id: parseInt(parent_id),
         },
         include: {
           vaccine_record: {
             orderBy: { step_rank: "asc" },
             include: { vaccine: true },
           },
+          parent: true,
         },
       });
     } catch (err) {
