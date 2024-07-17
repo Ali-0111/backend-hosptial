@@ -15,7 +15,6 @@ class ChildService {
 
   static async getAllChildByParentID(parent_id) {
     return await prisma.child.findMany({
-      take: 10,
       include: {
         vaccine_record: {
           orderBy: { step_rank: "asc" },
