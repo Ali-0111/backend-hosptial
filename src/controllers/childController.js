@@ -41,9 +41,13 @@ class ChildController {
   static async findChildByName(req, res) {
     const child_name = req.params.child_name;
     const parent_id = req.query.parent_id;
-
+    let child;
     try {
-      const child = await ChildService.findChildByName(child_name, parent_id);
+      if (parent_id) {
+        child = await ChildService.findChildByName(child_name, parent_id);
+      } else {
+        child = await ChildService.findChildByNameWithoutParentID(child_name);
+      }
 
       if (!child) {
         return res

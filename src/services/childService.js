@@ -61,6 +61,27 @@ class ChildService {
     }
   }
 
+  static async findChildByNameWithoutParentID(name) {
+    try {
+      return await prisma.child.findMany({
+        where: {
+          name: {
+            contains: name,
+          },
+        },
+        include: {
+          vaccine_record: {
+            orderBy: { step_rank: "asc" },
+            include: { vaccine: true },
+          },
+          parent: true,
+        },
+      });
+    } catch (err) {
+      return null;
+    }
+  }
+
   static async createChild(data) {
     return await prisma.child.create({ data });
   }
