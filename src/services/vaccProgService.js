@@ -24,7 +24,16 @@ class VaccProgService {
   }
 
   static async createVaccProg(data) {
-    return await prisma.vaccination_program.create({ data });
+    const { name, number_of_steps, steps } = data;
+    return await prisma.vaccination_program.create({
+      data: {
+        name,
+        number_of_steps,
+        vaccination_program_step: {
+          create: steps,
+        },
+      },
+    });
   }
 
   static async updateVaccProg(id, data) {
