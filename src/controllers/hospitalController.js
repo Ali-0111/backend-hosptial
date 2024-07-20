@@ -47,11 +47,22 @@ class HospitalController {
   static async createHospital(req, res) {
     try {
       const hospital = await HospitalService.createHospital(req.body);
+
+      const hashedPassword = await bcrypt.hash("asdf@123", 10);
+
+      const data = {
+        hospital_id: hospital.id,
+        username: hospital.name,
+        password: hashedPassword,
+      };
+
+      await HospitalService.registerHospital(data);
+
       res
         .status(201)
         .json({ message: "Hospital created successfully", hospital });
     } catch (error) {
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: "Internal Server Error", err: error.message });
     }
   }
 
