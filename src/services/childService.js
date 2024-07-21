@@ -9,6 +9,7 @@ class ChildService {
           orderBy: { step_rank: "asc" },
           include: { vaccine: true },
         },
+        parent: true,
       },
     });
   }
@@ -32,7 +33,7 @@ class ChildService {
     try {
       return await prisma.child.findUnique({
         where: { id: parseInt(id) },
-        include: { vaccine_record: true },
+        include: { vaccine_record: true, parent: true },
       });
     } catch (err) {
       return null;
