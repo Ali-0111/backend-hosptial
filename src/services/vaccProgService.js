@@ -48,13 +48,9 @@ class VaccProgService {
   }
 
   static async deleteVaccProg(id) {
-    try {
-      return await prisma.vaccination_program.delete({
-        where: { id: parseInt(id) },
-      });
-    } catch (err) {
-      return null;
-    }
+    return await prisma.vaccination_program.delete({
+      where: { id: parseInt(id) },
+    });
   }
 }
 
