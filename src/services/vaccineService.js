@@ -19,6 +19,7 @@ class VaccineService {
         where: {
           name: {
             contains: name,
+            mode: 'insensitive',
           },
         },
       });

@@ -27,7 +27,7 @@ class VaccineController {
   }
 
   static async findVaccineByName(req, res) {
-    const vaccine_name = req.params.vaccine_name.toUpperCase();
+    const vaccine_name = req.params.vaccine_name;
 
     try {
       const vaccine = await VaccineService.findVaccineByName(vaccine_name);
