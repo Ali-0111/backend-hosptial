@@ -40,6 +40,16 @@ class StepService {
     }
   }
 
+  static async updateManyStep(data) {
+    const {step_rank, vaccination_program_id, step_name} = data
+    return await prisma.vaccination_program_step.updateMany({
+      where: {vaccination_program_id: parseInt(vaccination_program_id), step_rank: parseInt(step_rank) },
+      data: {
+        step_name
+      },
+    });
+  }
+
   static async deleteStep(id) {
     try {
       return await prisma.vaccination_program_step.delete({
