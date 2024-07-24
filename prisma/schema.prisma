@@ -34,6 +34,10 @@ model child {
   nurse_id       Int?
   hospital_id    Int?
   parent_id      Int?
+  blood_group    String?          @default("o+") @db.Char(4)
+  mother_name    String?          @db.Char(50)
+  dob            String?          @db.Char(12)
+  gender         String?          @db.Char(8)
   parent         parent?          @relation(fields: [parent_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   vaccine_record vaccine_record[]
 }
@@ -77,7 +81,7 @@ model vaccine_record {
   child                  child               @relation(fields: [child_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   hospital               hospital            @relation(fields: [hospital_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   nurse                  nurse               @relation(fields: [nurse_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  vaccination_program    vaccination_program @relation(fields: [vaccination_program_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  vaccination_program    vaccination_program @relation(fields: [vaccination_program_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
   vaccine                vaccine             @relation(fields: [vaccine_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
