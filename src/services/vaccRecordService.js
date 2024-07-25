@@ -48,12 +48,14 @@ class VaccRecordService {
   }
 
   static async createManyVaccRecord(data) {
-    const { vaccination_program_id, child_id, nurse_id, hospital_id } = data;
+    const { vaccination_program_id, child_id, nurse_id, hospital_id, stepDates } = data;
     const { vaccination_program_step } = await VaccProgService.getVaccProgById(
       vaccination_program_id
     );
 
-    const groupData = vaccination_program_step.map((step) => {
+    console.log(stepDates)
+
+    const groupData = vaccination_program_step.map((step, i) => {
       const { vaccination_program_id, vaccine_id, step_rank, step_name } = step;
       return {
         child_id: child_id,
@@ -65,6 +67,7 @@ class VaccRecordService {
         step_rank,
         step_name,
         step_status: "pending",
+        due_date: stepDates[step_rank],
       };
     });
 
