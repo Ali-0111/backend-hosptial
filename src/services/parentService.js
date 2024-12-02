@@ -1,43 +1,44 @@
 const prisma = require("#prismaClient");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
 // SECRET_KEY
 const SECRET_KEY = process.env.SECRET_KEY;
-
-class HospitalService {
-  static async getAllHospitals() {
-    return await prisma.hospital.findMany({take: 10});
+class ParentService {
+  static async getAllParents() {
+    return await prisma.parent.findMany({ take: 10 });
   }
 
-  static async getHospitalById(id) {
+  static async getParentById(id) {
     try {
-      return await prisma.hospital.findUnique({ where: { id: parseInt(id) } });
+      return await prisma.parent.findUnique({ where: { id: parseInt(id) } });
     } catch (err) {
       return null;
     }
   }
 
-  static async findHospitalByName(name) {
+  static async findParentByName(name) {
     try {
-      return await prisma.hospital.findMany(
-        { where: { 
-            name: {
-              contains: name
-            }
-          }
-        });
+      return await prisma.parent.findMany({
+        where: {
+          family_name: {
+            contains: name,
+          },
+        },
+      });
     } catch (err) {
       return null;
     }
   }
 
-  static async createHospital(data) {
-    return await prisma.hospital.create({ data });
+  static async createParent(data) {
+    return await prisma.parent.create({ data });
   }
 
-  static async updateHospital(id, data) {
+  static async updateParent(id, data) {
     try {
-      return await prisma.hospital.update({
+      return await prisma.parent.update({
         where: { id: parseInt(id) },
         data,
       });
@@ -46,24 +47,24 @@ class HospitalService {
     }
   }
 
-  static async deleteHospital(id) {
+  static async deleteParent(id) {
     try {
-      return await prisma.hospital.delete({ where: { id: parseInt(id) } });
+      return await prisma.parent.delete({ where: { id: parseInt(id) } });
     } catch (err) {
       return null;
     }
   }
 
-  static async registerHospital(data) {
-    return await prisma.hospital_credentials.create({ data });
+  static async registerParent(data) {
+    return await prisma.parent_credentials.create({ data });
   }
 
-  static async logInHospital(data) {
+  static async logInParent(data) {
     const { username, password } = data;
 
-    const rec = await prisma.hospital_credentials.findUnique({
+    const rec = await prisma.parent_credentials.findUnique({
       where: { username },
-      include: { hospital: true },
+      include: { parent: true },
     });
 
     if (!rec) {
@@ -81,24 +82,25 @@ class HospitalService {
     });
 
     delete rec.password;
+
     return { profile: rec, token };
   }
 
-  static async updateHospitalSecurity(data) {
-    const { hospital_id, old_password, new_username, new_password } = data;
+  static async updateParentSecurity(data) {
+    const { parent_id, old_password, new_username, new_password } = data;
     try {
-      const hospitalRec = await prisma.hospital_credentials.findUnique({
-        where: { hospital_id: hospital_id },
+      const parentRec = await prisma.parent_credentials.findUnique({
+        where: { parent_id: parent_id },
       });
 
-      if (!hospitalRec) {
-        throw new Error("Hospital not found");
+      if (!parentRec) {
+        throw new Error("Parent not found");
       }
 
       // Verify the old password
       const isPasswordCorrect = await bcrypt.compare(
         old_password,
-        hospitalRec.password
+        parentRec.password
       );
 
       if (!isPasswordCorrect) {
@@ -117,17 +119,17 @@ class HospitalService {
         updateData.password = hashedPassword;
       }
 
-      // Update the nurse's credentials
-      const updatedHospital = await prisma.hospital_credentials.update({
-        where: { hospital_id: hospital_id },
+      // Update the parent's credentials
+      const updatedParent = await prisma.parent_credentials.update({
+        where: { parent_id: parent_id },
         data: updateData,
       });
 
-      return updatedHospital;
+      return updatedParent;
     } catch (error) {
       throw new Error(error.message);
     }
   }
 }
 
-module.exports = HospitalService;
+module.exports = ParentService;

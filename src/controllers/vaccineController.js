@@ -26,9 +26,30 @@ class VaccineController {
     }
   }
 
-  static async createVaccine(req, res) {
+  static async findVaccineByName(req, res) {
+    const vaccine_name = req.params.vaccine_name;
+
     try {
-      const vaccine = await VaccineService.createVaccine(req.body);
+      const vaccine = await VaccineService.findVaccineByName(vaccine_name);
+
+      if (!vaccine) {
+        return res
+          .status(404)
+          .json({ error: `Vaccine not found with name ${vaccine_name}` });
+      }
+      res.status(200).json(vaccine);
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+
+  static async createVaccine(req, res) {
+    const { name } = req.body;
+
+    try {
+      const vaccine = await VaccineService.createVaccine({
+        name: name.toUpperCase(),
+      });
       res
         .status(201)
         .json({ message: "Vaccine created successfully", vaccine });

@@ -60,6 +60,21 @@ class StepController {
     }
   }
 
+  static async updateManyStep(req, res) {
+    try {
+      const step = await StepService.updateManyStep(req.body);
+
+      if (!step) {
+        return res
+          .status(404)
+          .json({ error: `Steps updates failed` });
+      }
+      res.status(200).json({ message: "Steps updated successfully", step });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error", m: error.message });
+    }
+  }
+
   static async deleteStep(req, res) {
     try {
       const stepId = req.params.id;

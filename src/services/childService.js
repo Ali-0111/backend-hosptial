@@ -3,17 +3,29 @@ const prisma = require("#prismaClient");
 class ChildService {
   static async getAllChilds() {
     return await prisma.child.findMany({
-      take: 10
+      take: 10,
+      include: {
+        vaccine_record: {
+          orderBy: { step_rank: "asc" },
+          include: { vaccine: true },
+        },
+        parent: true,
+      },
     });
   }
 
-  static async getAllChildByNurseID(nurse_id) {
+  static async getAllChildByParentID(parent_id) {
     return await prisma.child.findMany({
-      take: 10,
-      include: { vaccine_record: {orderBy: {step_rank: 'asc'}, include: {vaccine: true} }},
+      include: {
+        vaccine_record: {
+          orderBy: { step_rank: "asc" },
+          include: { vaccine: true },
+        },
+        parent: true,
+      },
       where: {
-        nurse_id: parseInt(nurse_id)
-      }
+        parent_id: parseInt(parent_id),
+      },
     });
   }
 
@@ -21,24 +33,51 @@ class ChildService {
     try {
       return await prisma.child.findUnique({
         where: { id: parseInt(id) },
-        include: { vaccine_record: true },
+        include: { vaccine_record: true, parent: true },
       });
     } catch (err) {
       return null;
     }
   }
 
-  static async findChildByName(name) {
+  static async findChildByName(name, parent_id) {
     try {
-      return await prisma.child.findMany(
-        { 
-          where: { 
-            name: {
-              contains: name
-            }
+      return await prisma.child.findMany({
+        where: {
+          name: {
+            contains: name,
           },
-          include: { vaccine_record: {orderBy: {step_rank: 'asc'}, include: {vaccine: true}}}
-        });
+          parent_id: parseInt(parent_id),
+        },
+        include: {
+          vaccine_record: {
+            orderBy: { step_rank: "asc" },
+            include: { vaccine: true },
+          },
+          parent: true,
+        },
+      });
+    } catch (err) {
+      return null;
+    }
+  }
+
+  static async findChildByNameWithoutParentID(name) {
+    try {
+      return await prisma.child.findMany({
+        where: {
+          name: {
+            contains: name,
+          },
+        },
+        include: {
+          vaccine_record: {
+            orderBy: { step_rank: "asc" },
+            include: { vaccine: true },
+          },
+          parent: true,
+        },
+      });
     } catch (err) {
       return null;
     }
